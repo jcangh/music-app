@@ -7,7 +7,7 @@ var app = express();
 
 //routes
 app.get('/test', function(req,res){
-    res.status(200).send({message: 'first rest endpoint'});
+    res.status(200).send({message: 'test rest endpoint'});
 });
 
 
