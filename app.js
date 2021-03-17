@@ -1,18 +1,18 @@
 'use strict'
 
 var express = require('express');
-
+var userRoutes = require('./route/userRoute');
 
 var app = express();
 
-//routes
-app.get('/test', function(req,res){
-    res.status(200).send({message: 'test rest endpoint'});
-});
-
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+//routes
+app.use('/api', userRoutes);
+
+
+
 
 //http headers
 
