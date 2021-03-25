@@ -30,10 +30,24 @@ function handleNotFound(res, messageString){
     });
 }
 
+function handleSuccess(res, resource){
+    res.status(200).send({
+        resource: resource
+    });
+}
+
+function handleNotAuthorized(res,messageString){
+    res.status(403).send({
+        messageString: messageString
+    });
+}
+
 module.exports = {
     handleError,
     handleValidationFailed,
     handleCreated,
     handleUpdated,
-    handleNotFound
+    handleNotFound,
+    handleSuccess,
+    handleNotAuthorized
 }

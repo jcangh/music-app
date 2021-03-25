@@ -4,6 +4,7 @@ var User = require('../model/user');
 var bcrypt = require('bcrypt-nodejs');
 var ResponseUtil = require('../util/responseUtil');
 var UserValidator = require('../validator/userValidator');
+var jwt = require('../service/jwt');
 
 function saveUser(req, res){
     var user = new User();
@@ -41,6 +42,40 @@ function saveUser(req, res){
     }
 }
 
+function loginUser(req, res){
+    var params = req.body;
+    var email = params.email;
+    var password = params.password;
+
+    User.findOne({email: email.toLowerCase()}, (err, user) =>{
+        if (err){
+            ResponseUtil.handleError(res,'Request error');
+        }else{
+            if (!user){
+                ResponseUtil.handleNotFound(res,'User not found');
+            }else{
+                bcrypt.compare(password,user.password, function(err,check){
+                    if (check){
+                        if (params.gethash){
+                            ResponseUtil.handleSuccess(res,jwt.createToken(user));
+                        }else{
+                            ResponseUtil.handleSuccess(res,user);
+                        }
+                    }else{
+                        ResponseUtil.handleValidationFailed(res,'Wrong user/password');
+                    }
+                });
+            }
+        }
+    });
+}
+
+function test(req,res){
+    ResponseUtil.handleSuccess(res,'This is a test');
+}
+
 module.exports = {
-    saveUser
+    saveUser,
+    loginUser,
+    test
 };
